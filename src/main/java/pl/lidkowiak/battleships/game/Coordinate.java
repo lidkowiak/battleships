@@ -33,6 +33,13 @@ class Coordinate {
         this.row = row;
     }
 
+    Coordinate rightNeighbour() {
+        return new Coordinate((char) (column + 1), row);
+    }
+
+    Coordinate bottomNeighbour() {
+        return new Coordinate(column, row + 1);
+    }
 
     @Override
     public boolean equals(Object o) {

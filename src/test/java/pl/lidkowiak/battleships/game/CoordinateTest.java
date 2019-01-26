@@ -27,6 +27,18 @@ public class CoordinateTest {
         assertNotAbleToParse("Run, Forrest, Run!");
     }
 
+    @Test
+    public void should_properly_determine_right_neighbour() {
+        assertThat(new Coordinate('A', 10).rightNeighbour())
+                .isEqualTo(new Coordinate('B', 10));
+    }
+
+    @Test
+    public void should_properly_determine_bottom_neighbour() {
+        assertThat(new Coordinate('A', 10).bottomNeighbour())
+                .isEqualTo(new Coordinate('A', 11));
+    }
+
     private void successfullyParseAndAssert(String toParse, char expectedColumn, int expectedRow) {
         //given
         //when
