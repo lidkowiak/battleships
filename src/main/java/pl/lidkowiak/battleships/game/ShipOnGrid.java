@@ -1,5 +1,7 @@
 package pl.lidkowiak.battleships.game;
 
+import lombok.Builder;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,6 +42,7 @@ class ShipOnGrid {
     private final Map<Coordinate, PieceSquare> pieces;
     private int hits;
 
+    @Builder
     ShipOnGrid(int size, Coordinate startPosition, Orientation orientation) {
         this.size = size;
         this.pieces = new HashMap<>(size);

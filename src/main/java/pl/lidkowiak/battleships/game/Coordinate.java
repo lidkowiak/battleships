@@ -11,9 +11,6 @@ class Coordinate {
 
     private static final Pattern COORDINATE_STRING_PATTERN = Pattern.compile("^([A-Za-z]) *([1-9][0-9]*)$");
 
-    private final char column;
-    private final int row;
-
     static Optional<Coordinate> parse(String toParse) {
         if (isNull(toParse)) {
             return Optional.empty();
@@ -28,9 +25,24 @@ class Coordinate {
         return Optional.of(new Coordinate(columnString.charAt(0), Integer.parseUnsignedInt(rowString)));
     }
 
-    Coordinate(char column, int row) {
+    static Coordinate of(char column, int row) {
+        return new Coordinate(column, row);
+    }
+
+    private final char column;
+    private final int row;
+
+    private Coordinate(char column, int row) {
         this.column = column;
         this.row = row;
+    }
+
+    int columnZeroIndexed() {
+        return column - 'A';
+    }
+
+    int rowZeroIndexed() {
+        return row - 1;
     }
 
     Coordinate rightNeighbour() {
@@ -40,6 +52,16 @@ class Coordinate {
     Coordinate bottomNeighbour() {
         return new Coordinate(column, row + 1);
     }
+
+    boolean isWithinSquaredBoardOfSize(int sizeToTest) {
+        return isWithinRange(columnZeroIndexed(), 0, sizeToTest - 1)
+                && isWithinRange(rowZeroIndexed(), 0, sizeToTest - 1);
+    }
+
+    private boolean isWithinRange(int toTest, int lowerBound, int upperBound) {
+        return toTest >= lowerBound && toTest <= upperBound;
+    }
+
 
     @Override
     public boolean equals(Object o) {

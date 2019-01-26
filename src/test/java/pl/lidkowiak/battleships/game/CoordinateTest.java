@@ -29,14 +29,23 @@ public class CoordinateTest {
 
     @Test
     public void should_properly_determine_right_neighbour() {
-        assertThat(new Coordinate('A', 10).rightNeighbour())
-                .isEqualTo(new Coordinate('B', 10));
+        assertThat(Coordinate.of('A', 10).rightNeighbour())
+                .isEqualTo(Coordinate.of('B', 10));
     }
 
     @Test
     public void should_properly_determine_bottom_neighbour() {
-        assertThat(new Coordinate('A', 10).bottomNeighbour())
-                .isEqualTo(new Coordinate('A', 11));
+        assertThat(Coordinate.of('A', 10).bottomNeighbour())
+                .isEqualTo(Coordinate.of('A', 11));
+    }
+
+    @Test
+    public void should_test_whether_coordinate_is_within_squared_board() {
+        assertThat(Coordinate.of('A', 10).isWithinSquaredBoardOfSize(10)).isTrue();
+        assertThat(Coordinate.of('J', 10).isWithinSquaredBoardOfSize(10)).isTrue();
+
+        assertThat(Coordinate.of('K', 3).isWithinSquaredBoardOfSize(10)).isFalse();
+        assertThat(Coordinate.of('A', 11).isWithinSquaredBoardOfSize(10)).isFalse();
     }
 
     private void successfullyParseAndAssert(String toParse, char expectedColumn, int expectedRow) {
@@ -47,7 +56,7 @@ public class CoordinateTest {
         //then
         assertThat(cut)
                 .isNotEmpty()
-                .contains(new Coordinate(expectedColumn, expectedRow));
+                .contains(Coordinate.of(expectedColumn, expectedRow));
     }
 
     private void assertNotAbleToParse(String toParse) {

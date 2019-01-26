@@ -2,6 +2,6 @@ package pl.lidkowiak.battleships.game;
 
 enum ShotResult {
 
-    HIT, MISS, SINK
+    OUT_OF_GRID, HIT, MISS, SINK
 
 }

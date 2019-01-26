@@ -16,18 +16,18 @@ public class ShipOnGridTest {
     public void should_newly_created_ship_be_not_sunk_and_has_properly_set_pieces_with_NO_HIT_state() {
         // given
         //when
-        ShipOnGrid cut = new ShipOnGrid(5, new Coordinate('A', 1), Orientation.HORIZONTAL);
+        ShipOnGrid cut = new ShipOnGrid(5, Coordinate.of('A', 1), Orientation.HORIZONTAL);
 
         Map<Coordinate, GridSquare> pieces = cut.getPieces();
 
         //then
         assertThat(cut.isSunk()).isFalse();
         assertThat(pieces.keySet()).containsExactlyInAnyOrder(
-                new Coordinate('A', 1),
-                new Coordinate('B', 1),
-                new Coordinate('C', 1),
-                new Coordinate('D', 1),
-                new Coordinate('E', 1)
+                Coordinate.of('A', 1),
+                Coordinate.of('B', 1),
+                Coordinate.of('C', 1),
+                Coordinate.of('D', 1),
+                Coordinate.of('E', 1)
         );
 
         pieces.values().forEach(p -> assertThat(p.state()).isEqualTo(NOT_HIT));
@@ -36,7 +36,7 @@ public class ShipOnGridTest {
     @Test
     public void should_ship_sunk_when_all_of_its_pieces_are_hit() {
         // given
-        ShipOnGrid cut = new ShipOnGrid(3, new Coordinate('A', 1), Orientation.HORIZONTAL);
+        ShipOnGrid cut = new ShipOnGrid(3, Coordinate.of('A', 1), Orientation.HORIZONTAL);
 
         //when
         List<GridSquare> pieces = new ArrayList<>(cut.getPieces().values());
@@ -53,8 +53,8 @@ public class ShipOnGridTest {
     @Test
     public void should_return_that_two_ships_overlap() {
         // given
-        ShipOnGrid ship1 = new ShipOnGrid(3, new Coordinate('A', 1), Orientation.HORIZONTAL);
-        ShipOnGrid ship2 = new ShipOnGrid(4, new Coordinate('B', 1), Orientation.VERTICAL);
+        ShipOnGrid ship1 = new ShipOnGrid(3, Coordinate.of('A', 1), Orientation.HORIZONTAL);
+        ShipOnGrid ship2 = new ShipOnGrid(4, Coordinate.of('B', 1), Orientation.VERTICAL);
 
         //when
         //then
@@ -64,8 +64,8 @@ public class ShipOnGridTest {
     @Test
     public void should_return_that_two_ships_does_not_overlap() {
         // given
-        ShipOnGrid ship1 = new ShipOnGrid(3, new Coordinate('A', 1), Orientation.HORIZONTAL);
-        ShipOnGrid ship2 = new ShipOnGrid(4, new Coordinate('G', 5), Orientation.VERTICAL);
+        ShipOnGrid ship1 = new ShipOnGrid(3, Coordinate.of('A', 1), Orientation.HORIZONTAL);
+        ShipOnGrid ship2 = new ShipOnGrid(4, Coordinate.of('G', 5), Orientation.VERTICAL);
 
         //when
         //then
