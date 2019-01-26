@@ -1,18 +1,20 @@
 package pl.lidkowiak.battleships.game;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Collections.unmodifiableMap;
 
-class Ship {
+class ShipOnGrid {
 
-    static class PieceSquare implements GridSquare {
+    private static class PieceSquare implements GridSquare {
 
-        private final Ship ship;
+        private final ShipOnGrid ship;
         private State state;
 
-        private PieceSquare(Ship ship) {
+        private PieceSquare(ShipOnGrid ship) {
             this.ship = ship;
             this.state = State.NOT_HIT;
         }
@@ -28,31 +30,44 @@ class Ship {
             return state;
         }
 
-        void shipSank() {
+        private void shipSank() {
             state = State.SUNK;
         }
 
     }
 
     private final int size;
-    private Map<Coordinate, PieceSquare> pieces;
+    private final Map<Coordinate, PieceSquare> pieces;
     private int hits;
 
-    Ship(int size) {
+    ShipOnGrid(int size, Coordinate startPosition, Orientation orientation) {
         this.size = size;
+        this.pieces = new HashMap<>(size);
         this.hits = 0;
+
+        initPieces(startPosition, orientation);
     }
 
-    void setPosition(Coordinate from, Orientation orientation) {
-        pieces = new HashMap<>(size);
-        Coordinate current = from;
+
+    Map<Coordinate, GridSquare> getPieces() {
+        return unmodifiableMap(pieces);
+    }
+
+    boolean overlap(ShipOnGrid second) {
+        final Set<Coordinate> intersection = new HashSet<>(pieces.keySet());
+        intersection.retainAll(second.pieces.keySet());
+        return !intersection.isEmpty();
+    }
+
+    boolean isSunk() {
+        return hits >= size;
+    }
+
+    private void initPieces(Coordinate startPosition, Orientation orientation) {
+        Coordinate current = startPosition;
         for (int i = 1; i <= size; i++, current = orientation.next(current)) {
             pieces.put(current, new PieceSquare(this));
         }
-    }
-
-    public Map<Coordinate, GridSquare> getPieces() {
-        return unmodifiableMap(pieces);
     }
 
     private ShotResult hit() {
@@ -63,10 +78,5 @@ class Ship {
         }
         return ShotResult.HIT;
     }
-
-    private boolean isSunk() {
-        return hits >= size;
-    }
-
 
 }
