@@ -1,6 +1,7 @@
 package pl.lidkowiak.battleships.gamelogic;
 
 public enum State {
+
     NOT_HIT(' '),
     MISS('O'),
     HIT('X'),

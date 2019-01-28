@@ -12,7 +12,7 @@ import static pl.lidkowiak.battleships.gamelogic.ShotResult.HIT;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
 import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 
-class ShipOnGrid {
+public class ShipOnGrid {
 
     private static class PieceSquare implements GridSquare {
 

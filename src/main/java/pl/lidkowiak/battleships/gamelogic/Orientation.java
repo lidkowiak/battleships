@@ -2,7 +2,7 @@ package pl.lidkowiak.battleships.gamelogic;
 
 import java.util.function.UnaryOperator;
 
-enum Orientation {
+public enum Orientation {
 
     /**
      * The horizontal (right <-> left) orientation

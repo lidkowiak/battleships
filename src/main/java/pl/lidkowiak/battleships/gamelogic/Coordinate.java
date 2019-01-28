@@ -25,7 +25,7 @@ public class Coordinate {
         return Optional.of(new Coordinate(columnString.charAt(0), Integer.parseUnsignedInt(rowString)));
     }
 
-    static Coordinate of(char column, int row) {
+    public static Coordinate of(char column, int row) {
         return new Coordinate(column, row);
     }
 
