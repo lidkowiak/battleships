@@ -16,11 +16,11 @@ public class ConsoleBattleships {
 
     private static final String LEGEND = "Play a one-sided game of Battleships.\n" +
             "Your goal is to sink one Battleship and two Destroyers.\n" +
-            "Please enter coordinates of the form “A5”, where “A” is the column and “5” is the row, to specify a square to target.\n" +
+            "Please enter coordinates of the form 'A5', where 'A' is the column and '5' is the row, to specify a square to target.\n" +
             "Grid legend: \n" +
-            "\"O\" - miss, \n" +
-            "\"X\" - hit, \n" +
-            "\"S\" - part of sunk ship\n\n";
+            "'O' - miss, \n" +
+            "'X' - hit, \n" +
+            "'S' - part of sunk ship\n\n";
 
 
     public static void main(String[] args) {
