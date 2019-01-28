@@ -2,6 +2,19 @@ package pl.lidkowiak.battleships.gamelogic;
 
 public enum ShotResult {
 
-    OUT_OF_GRID, HIT, MISS, SINK
+    OUTSIDE_THE_GRID("Outside the grid!"),
+    HIT("HIT!"),
+    MISS("MISS"),
+    SINK("SINK!");
+
+    private String message;
+
+    ShotResult(String message) {
+        this.message = message;
+    }
+
+    public String message() {
+        return message;
+    }
 
 }

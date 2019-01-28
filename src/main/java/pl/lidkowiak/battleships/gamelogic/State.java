@@ -2,9 +2,9 @@ package pl.lidkowiak.battleships.gamelogic;
 
 public enum State {
     NOT_HIT(' '),
-    MISS('o'),
-    HIT('x'),
-    SUNK('X');
+    MISS('O'),
+    HIT('X'),
+    SUNK('S');
 
     private final char asChar;
 

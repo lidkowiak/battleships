@@ -1,9 +1,12 @@
 package pl.lidkowiak.battleships;
 
-import pl.lidkowiak.battleships.gamelogic.*;
+import pl.lidkowiak.battleships.gamelogic.Board;
+import pl.lidkowiak.battleships.gamelogic.Coordinate;
+import pl.lidkowiak.battleships.gamelogic.Ships;
+import pl.lidkowiak.battleships.gamelogic.ShotResult;
 
+import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -14,78 +17,43 @@ public class BattleshipsConsoleGame {
     private final Board board;
     private final Scanner in;
     private final PrintStream out;
-    private final BoardConsolePrinter boardPrinter;
+    private final BoardPrinter boardPrinter;
 
     public static void main(String[] args) {
-        new BattleshipsConsoleGame().play();
+        final BattleshipsConsoleGame battleshipsConsoleGame = new BattleshipsConsoleGame(
+                Board.newWithShipsPlacedAtRandom(BOARD_SIZE, Ships.BATTLESHIP, Ships.DESTROYER, Ships.DESTROYER),
+                System.in, System.out);
+        battleshipsConsoleGame.play();
     }
 
-    private BattleshipsConsoleGame() {
-        this.board = Board.newWithShipsPlacedAtRandom(BOARD_SIZE, Ships.BATTLESHIP, Ships.DESTROYER, Ships.DESTROYER);
-        this.in = new Scanner(System.in);
-        this.out = System.out;
-        this.boardPrinter = new BoardConsolePrinter(board, out);
+    private BattleshipsConsoleGame(Board board, InputStream in, PrintStream out) {
+        this.board = board;
+        this.in = new Scanner(in);
+        this.out = out;
+        this.boardPrinter = new BoardPrinter(out, board);
     }
 
     private void play() {
-        while (!board.allShipsAreSunk()) {
+        boardPrinter.print();
+        while (true) {
+            final ShotResult shotResult = board.shot(coordinateFromIn());
+            out.println(shotResult.message());
             boardPrinter.print();
-            final ShotResult shotResult = board.shot(validCoordinateFromConsole());
-        }
-        printEndOfGameMessage();
-    }
-
-    private Coordinate validCoordinateFromConsole() {
-        Optional<Coordinate> candidate = Optional.empty();
-        out.println("Your shoot: ");
-        while (!candidate.isPresent()) {
-            candidate = Coordinate.parse(in.nextLine());
-        }
-        return candidate.get();
-    }
-
-    private void printEndOfGameMessage() {
-        // potrzeba było tyle strzałów
-    }
-
-    private static class BoardConsolePrinter {
-
-        private final Board board;
-        private final String header;
-        private final PrintStream out;
-
-        public BoardConsolePrinter(Board board, PrintStream out) {
-            this.board = board;
-            this.header = initHeader();
-            this.out = out;
-        }
-
-        private String initHeader() {
-            final StringBuilder sb = new StringBuilder();
-            sb.append("   ");
-            for (char col = 'A'; col < 'A' + board.size(); col++) {
-                sb.append(col);
+            if (board.allShipsAreSunk()) {
+                break;
             }
-            sb.append("\n");
-
-            return sb.toString();
         }
+        out.println("All ships are sunk! GAME OVER");
+    }
 
-        public void print() {
-            final StringBuilder sb = new StringBuilder();
-            sb.append(header);
-
-            for (int rowNo = 1; rowNo <= board.size(); rowNo++) {
-                List<State> row = board.row(rowNo);
-                appendRow(sb, rowNo, row);
+    private Coordinate coordinateFromIn() {
+        while (true) {
+            out.print("Your shoot: ");
+            final Optional<Coordinate> candidate = Coordinate.parse(in.nextLine());
+            if (candidate.isPresent()) {
+                return candidate.get();
             }
-            out.println(sb.toString());
-        }
-
-        private void appendRow(StringBuilder sb, int rowNo, List<State> row) {
-            sb.append(String.format("%2d ", rowNo));
-            row.forEach(s -> sb.append(s.asChar()));
-            sb.append("\n");
+            out.println("Can not recognize coordinate. Valid coordinate example: A4");
         }
     }
 }

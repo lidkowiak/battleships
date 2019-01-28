@@ -9,7 +9,7 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
-import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUT_OF_GRID;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
 
 public class Board {
@@ -37,7 +37,7 @@ public class Board {
 
     public ShotResult shot(Coordinate coordinate) {
         if (!coordinate.isWithinSquaredBoardOfSize(size)) {
-            return OUT_OF_GRID;
+            return OUTSIDE_THE_GRID;
         }
         final ShotResult shotResult = gridSquareAt(coordinate).shot();
         if (SINK.equals(shotResult)) {

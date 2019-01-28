@@ -6,7 +6,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUT_OF_GRID;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 
 public class BoardTest {
 
@@ -54,7 +54,7 @@ public class BoardTest {
 
         //when
         //then
-        assertThat(cut.shot(Coordinate.of('Z', 4))).isEqualTo(OUT_OF_GRID);
+        assertThat(cut.shot(Coordinate.of('Z', 4))).isEqualTo(OUTSIDE_THE_GRID);
     }
 
     @Test
