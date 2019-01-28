@@ -2,13 +2,17 @@ package pl.lidkowiak.battleships;
 
 import pl.lidkowiak.battleships.gamelogic.Board;
 import pl.lidkowiak.battleships.gamelogic.Coordinate;
-import pl.lidkowiak.battleships.gamelogic.Ships;
 import pl.lidkowiak.battleships.gamelogic.ShotResult;
 
 import java.io.PrintStream;
 import java.util.function.Supplier;
 
+import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.Ships.DESTROYER;
+
 public class ConsoleBattleships {
+
+    private static final int BOARD_SIZE = 10;
 
     private static final String LEGEND = "Play a one-sided game of Battleships.\n" +
             "Your goal is to sink one Battleship and two Destroyers.\n" +
@@ -18,15 +22,13 @@ public class ConsoleBattleships {
             "\"X\" - hit, \n" +
             "\"S\" - part of sunk ship\n\n";
 
-    private static final int BOARD_SIZE = 10;
 
     public static void main(String[] args) {
         final ConsoleBattleships consoleBattleships = new ConsoleBattleships(
-                Board.newWithShipsPlacedAtRandom(BOARD_SIZE, Ships.BATTLESHIP, Ships.DESTROYER, Ships.DESTROYER),
+                Board.newWithShipsPlacedAtRandom(BOARD_SIZE, BATTLESHIP, DESTROYER, DESTROYER),
                 new InputStreamCoordinateSupplier(System.in, System.out), System.out);
         consoleBattleships.play();
     }
-
 
     private final Board board;
     private final Supplier<Coordinate> coordinateSupplier;

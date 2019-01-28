@@ -17,7 +17,7 @@ public class BoardTest {
                         singletonList(ShipOnGrid.builder()
                                 .size(5)
                                 .startPosition(Coordinate.of('G', 6))
-                                .orientation(Orientation.HORIZONTAL)
+                                .orientation(ShipOnGrid.Orientation.HORIZONTAL)
                                 .build())
                         )
                 )
@@ -31,12 +31,12 @@ public class BoardTest {
                         asList(ShipOnGrid.builder()
                                         .size(5)
                                         .startPosition(Coordinate.of('A', 1))
-                                        .orientation(Orientation.HORIZONTAL)
+                                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
                                         .build(),
                                 ShipOnGrid.builder()
                                         .size(5)
                                         .startPosition(Coordinate.of('B', 1))
-                                        .orientation(Orientation.VERTICAL)
+                                        .orientation(ShipOnGrid.Orientation.VERTICAL)
                                         .build())
                         )
                 )
@@ -49,7 +49,7 @@ public class BoardTest {
         Board cut = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
                         .size(5)
                         .startPosition(Coordinate.of('A', 1))
-                        .orientation(Orientation.HORIZONTAL)
+                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
                         .build()));
 
         //when
@@ -63,7 +63,7 @@ public class BoardTest {
         Board cut = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
                         .size(5)
                         .startPosition(Coordinate.of('A', 1))
-                        .orientation(Orientation.HORIZONTAL)
+                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
                         .build()));
 
         //when

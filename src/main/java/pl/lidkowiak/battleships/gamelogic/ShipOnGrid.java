@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.UnaryOperator;
 
 import static java.util.Collections.unmodifiableMap;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.HIT;
@@ -13,36 +14,6 @@ import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
 import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 
 public class ShipOnGrid {
-
-    private static class PieceSquare implements GridSquare {
-
-        private final ShipOnGrid ship;
-        private State state;
-
-        private PieceSquare(ShipOnGrid ship) {
-            this.ship = ship;
-            this.state = NOT_HIT;
-        }
-
-        @Override
-        public ShotResult shot() {
-            if (NOT_HIT.equals(state)) {
-                state = State.HIT;
-                return ship.hit();
-            }
-            return ship.isSunk() ? SINK : HIT;
-        }
-
-        @Override
-        public State state() {
-            return state;
-        }
-
-        private void shipSank() {
-            state = State.SUNK;
-        }
-
-    }
 
     private final int size;
     private final Map<Coordinate, PieceSquare> pieces;
@@ -56,7 +27,6 @@ public class ShipOnGrid {
 
         initPieces(startPosition, orientation);
     }
-
 
     Map<Coordinate, GridSquare> getPieces() {
         return unmodifiableMap(pieces);
@@ -88,4 +58,56 @@ public class ShipOnGrid {
         return HIT;
     }
 
+    public enum Orientation {
+
+        /**
+         * The horizontal (right <-> left) orientation
+         */
+        HORIZONTAL(Coordinate::rightNeighbour),
+
+        /**
+         * The vertical (top <-> bottom) orientation
+         */
+        VERTICAL(Coordinate::bottomNeighbour);
+
+        private final UnaryOperator<Coordinate> nextFunction;
+
+        Orientation(UnaryOperator<Coordinate> nextFunction) {
+            this.nextFunction = nextFunction;
+        }
+
+        Coordinate next(Coordinate c) {
+            return nextFunction.apply(c);
+        }
+    }
+
+    private static class PieceSquare implements GridSquare {
+
+        private final ShipOnGrid ship;
+        private State state;
+
+        private PieceSquare(ShipOnGrid ship) {
+            this.ship = ship;
+            this.state = NOT_HIT;
+        }
+
+        @Override
+        public ShotResult shot() {
+            if (NOT_HIT.equals(state)) {
+                state = State.HIT;
+                return ship.hit();
+            }
+            return ship.isSunk() ? SINK : HIT;
+        }
+
+        @Override
+        public State state() {
+            return state;
+        }
+
+        private void shipSank() {
+            state = State.SUNK;
+        }
+
+    }
 }

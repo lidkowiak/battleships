@@ -21,7 +21,7 @@ public class Board {
     private int sunkShipsCount = 0;
 
     public static Board newWithShipsPlacedAtRandom(int size, Ships... ships) {
-        return newWithAlreadyPlacedShips(size, new RandomShipPlaceMaker(size, ships).shipsOnGrid());
+        return newWithAlreadyPlacedShips(size, new RandomShipOnGridDeployer(size, ships).shipsOnGrid());
     }
 
     public static Board newWithAlreadyPlacedShips(int size, Collection<ShipOnGrid> ships) {

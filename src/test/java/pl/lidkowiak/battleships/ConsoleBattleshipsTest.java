@@ -3,7 +3,6 @@ package pl.lidkowiak.battleships;
 import org.junit.Test;
 import pl.lidkowiak.battleships.gamelogic.Board;
 import pl.lidkowiak.battleships.gamelogic.Coordinate;
-import pl.lidkowiak.battleships.gamelogic.Orientation;
 import pl.lidkowiak.battleships.gamelogic.ShipOnGrid;
 
 import java.util.Iterator;
@@ -25,7 +24,7 @@ public class ConsoleBattleshipsTest {
         Board board = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
                 .size(5)
                 .startPosition(Coordinate.of('A', 1))
-                .orientation(Orientation.HORIZONTAL)
+                .orientation(ShipOnGrid.Orientation.HORIZONTAL)
                 .build()));
         ConsoleBattleships cut = new ConsoleBattleships(board, coordinateIterator::next, new NullPrintStream());
 
