@@ -6,6 +6,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
+import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.VERTICAL;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 
 public class BoardTest {
@@ -14,12 +16,7 @@ public class BoardTest {
     public void should_not_be_able_to_create_board_with_ships_placed_outside_board() {
         assertThatIllegalStateException()
                 .isThrownBy(() -> Board.newWithAlreadyPlacedShips(10,
-                        singletonList(ShipOnGrid.builder()
-                                .size(5)
-                                .startPosition(Coordinate.of('G', 6))
-                                .orientation(ShipOnGrid.Orientation.HORIZONTAL)
-                                .build())
-                        )
+                        singletonList(new ShipOnGrid(5, Coordinate.of('G', 6), HORIZONTAL)))
                 )
                 .withMessage("Ship is placed outside board.");
     }
@@ -28,17 +25,8 @@ public class BoardTest {
     public void should_not_be_able_to_create_board_with_overlapping_ships() {
         assertThatIllegalStateException()
                 .isThrownBy(() -> Board.newWithAlreadyPlacedShips(10,
-                        asList(ShipOnGrid.builder()
-                                        .size(5)
-                                        .startPosition(Coordinate.of('A', 1))
-                                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
-                                        .build(),
-                                ShipOnGrid.builder()
-                                        .size(5)
-                                        .startPosition(Coordinate.of('B', 1))
-                                        .orientation(ShipOnGrid.Orientation.VERTICAL)
-                                        .build())
-                        )
+                        asList(new ShipOnGrid(5, Coordinate.of('A', 1), HORIZONTAL),
+                                new ShipOnGrid(5, Coordinate.of('B', 1), VERTICAL)))
                 )
                 .withMessage("Ships overlap.");
     }
@@ -46,11 +34,8 @@ public class BoardTest {
     @Test
     public void should_get_OUT_OF_GRID_when_shot_out_of_board_range() {
         //given
-        Board cut = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
-                        .size(5)
-                        .startPosition(Coordinate.of('A', 1))
-                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
-                        .build()));
+        Board cut = Board.newWithAlreadyPlacedShips(10,
+                singletonList(new ShipOnGrid(5, Coordinate.of('A', 1), HORIZONTAL)));
 
         //when
         //then
@@ -60,11 +45,8 @@ public class BoardTest {
     @Test
     public void should_sink_ship() {
         //given
-        Board cut = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
-                        .size(5)
-                        .startPosition(Coordinate.of('A', 1))
-                        .orientation(ShipOnGrid.Orientation.HORIZONTAL)
-                        .build()));
+        Board cut = Board.newWithAlreadyPlacedShips(10,
+                singletonList(new ShipOnGrid(5, Coordinate.of('A', 1), HORIZONTAL)));
 
         //when
         cut.shot(Coordinate.of('A', 2));//MISS

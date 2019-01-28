@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
 
 public class ConsoleBattleshipsTest {
 
@@ -21,11 +22,9 @@ public class ConsoleBattleshipsTest {
                 Coordinate.of('D', 1),
                 Coordinate.of('E', 1)).iterator();
 
-        Board board = Board.newWithAlreadyPlacedShips(10, singletonList(ShipOnGrid.builder()
-                .size(5)
-                .startPosition(Coordinate.of('A', 1))
-                .orientation(ShipOnGrid.Orientation.HORIZONTAL)
-                .build()));
+        Board board = Board.newWithAlreadyPlacedShips(10,
+                singletonList(new ShipOnGrid(5, Coordinate.of('A', 1), HORIZONTAL))
+        );
         ConsoleBattleships cut = new ConsoleBattleships(board, coordinateIterator::next, new NullPrintStream());
 
         //when
