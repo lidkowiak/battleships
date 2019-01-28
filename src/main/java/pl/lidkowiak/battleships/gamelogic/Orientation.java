@@ -1,4 +1,4 @@
-package pl.lidkowiak.battleships.game;
+package pl.lidkowiak.battleships.gamelogic;
 
 import java.util.function.UnaryOperator;
 

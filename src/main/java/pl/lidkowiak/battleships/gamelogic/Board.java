@@ -1,16 +1,18 @@
-package pl.lidkowiak.battleships.game;
-
-import lombok.Builder;
+package pl.lidkowiak.battleships.gamelogic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static pl.lidkowiak.battleships.game.ShotResult.OUT_OF_GRID;
-import static pl.lidkowiak.battleships.game.ShotResult.SINK;
+import static java.util.stream.Collectors.toList;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUT_OF_GRID;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
 
-class Board {
+public class Board {
 
     private final int size;
     private final GridSquare[][] grid;
@@ -18,16 +20,23 @@ class Board {
 
     private int sunkShipsCount = 0;
 
-    @Builder
-    Board(int size, List<ShipOnGrid> ships) {
+    public static Board newWithShipsPlacedAtRandom(int size, Ships... ships) {
+        return new Board(size, new RandomShipPlaceMaker(size, ships).shipsOnGrid());
+    }
+
+    public static Board newWithAlreadyPlacedShips(int size, Collection<ShipOnGrid> ships) {
+        return new Board(size, ships);
+    }
+
+    private Board(int size, Collection<ShipOnGrid> ships) {
         this.size = size;
         this.grid = new GridSquare[size][size];
         this.ships = new ArrayList<>(ships);
         initGrid();
     }
 
-    ShotResult shot(Coordinate coordinate) {
-        if(!coordinate.isWithinSquaredBoardOfSize(size)) {
+    public ShotResult shot(Coordinate coordinate) {
+        if (!coordinate.isWithinSquaredBoardOfSize(size)) {
             return OUT_OF_GRID;
         }
         final ShotResult shotResult = gridSquareAt(coordinate).shot();
@@ -37,10 +46,19 @@ class Board {
         return shotResult;
     }
 
-    boolean allShipsAreSunk() {
+    public boolean allShipsAreSunk() {
         return sunkShipsCount >= ships.size();
     }
 
+    public int size() {
+        return size;
+    }
+
+    public List<State> row(int i) {
+        return unmodifiableList(Arrays.stream(grid[i - 1])
+                .map(GridSquare::state)
+                .collect(toList()));
+    }
 
     private void initGrid() {
         ships.forEach(this::putShipOnGrid);
@@ -52,7 +70,7 @@ class Board {
             if (!c.isWithinSquaredBoardOfSize(size)) {
                 throw new IllegalStateException("Ship is placed outside board.");
             }
-            if (nonNull(grid[c.columnZeroIndexed()][c.rowZeroIndexed()])) {
+            if (nonNull(gridSquareAt(c))) {
                 throw new IllegalStateException("Ships overlap.");
             }
             setGridSquareAt(c, gs);
@@ -70,11 +88,11 @@ class Board {
     }
 
     private void setGridSquareAt(Coordinate c, GridSquare gs) {
-        grid[c.columnZeroIndexed()][c.rowZeroIndexed()] = gs;
+        grid[c.rowZeroIndexed()][c.columnZeroIndexed()] = gs;
     }
 
     private GridSquare gridSquareAt(Coordinate c) {
-        return grid[c.columnZeroIndexed()][c.rowZeroIndexed()];
+        return grid[c.rowZeroIndexed()][c.columnZeroIndexed()];
     }
 
     private static class EmptySquare implements GridSquare {

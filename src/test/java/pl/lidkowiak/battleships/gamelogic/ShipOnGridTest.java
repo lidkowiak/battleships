@@ -1,4 +1,4 @@
-package pl.lidkowiak.battleships.game;
+package pl.lidkowiak.battleships.gamelogic;
 
 import org.junit.Test;
 
@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lidkowiak.battleships.game.GridSquare.State.NOT_HIT;
-import static pl.lidkowiak.battleships.game.GridSquare.State.SUNK;
+import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
+import static pl.lidkowiak.battleships.gamelogic.State.SUNK;
 
 public class ShipOnGridTest {
 
@@ -48,6 +48,22 @@ public class ShipOnGridTest {
         //then
         assertThat(cut.isSunk()).isTrue();
         pieces.forEach(p -> assertThat(p.state()).isEqualTo(SUNK));
+    }
+
+    @Test
+    public void should_not_skin_ship_when_not_all_of_its_pieces_are_hit() {
+        // given
+        ShipOnGrid cut = new ShipOnGrid(3, Coordinate.of('A', 1), Orientation.HORIZONTAL);
+
+        //when
+        List<GridSquare> pieces = new ArrayList<>(cut.getPieces().values());
+
+        pieces.get(0).shot();
+        pieces.get(0).shot();
+        pieces.get(0).shot();
+
+        //then
+        assertThat(cut.isSunk()).isFalse();
     }
 
     @Test

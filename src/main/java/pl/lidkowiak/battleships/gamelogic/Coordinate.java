@@ -1,4 +1,4 @@
-package pl.lidkowiak.battleships.game;
+package pl.lidkowiak.battleships.gamelogic;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -7,11 +7,11 @@ import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
-class Coordinate {
+public class Coordinate {
 
     private static final Pattern COORDINATE_STRING_PATTERN = Pattern.compile("^([A-Za-z]) *([1-9][0-9]*)$");
 
-    static Optional<Coordinate> parse(String toParse) {
+    public static Optional<Coordinate> parse(String toParse) {
         if (isNull(toParse)) {
             return Optional.empty();
         }

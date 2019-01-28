@@ -1,4 +1,4 @@
-package pl.lidkowiak.battleships.game;
+package pl.lidkowiak.battleships.gamelogic;
 
 import lombok.Builder;
 
@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.unmodifiableMap;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.HIT;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
+import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 
 class ShipOnGrid {
 
@@ -18,13 +21,16 @@ class ShipOnGrid {
 
         private PieceSquare(ShipOnGrid ship) {
             this.ship = ship;
-            this.state = State.NOT_HIT;
+            this.state = NOT_HIT;
         }
 
         @Override
         public ShotResult shot() {
-            state = State.HIT;
-            return ship.hit();
+            if (NOT_HIT.equals(state)) {
+                state = State.HIT;
+                return ship.hit();
+            }
+            return ship.isSunk() ? SINK : HIT;
         }
 
         @Override
@@ -77,9 +83,9 @@ class ShipOnGrid {
         hits++;
         if (isSunk()) {
             pieces.values().forEach(PieceSquare::shipSank);
-            return ShotResult.SINK;
+            return SINK;
         }
-        return ShotResult.HIT;
+        return HIT;
     }
 
 }
