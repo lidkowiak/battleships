@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 public class CoordinateTest {
 
@@ -46,6 +47,16 @@ public class CoordinateTest {
 
         assertThat(Coordinate.of('K', 3).isWithinSquaredBoardOfSize(10)).isFalse();
         assertThat(Coordinate.of('A', 11).isWithinSquaredBoardOfSize(10)).isFalse();
+    }
+
+    @Test
+    public void should_not_create_with_invalid_column() {
+        assertThatIllegalArgumentException().isThrownBy(()-> Coordinate.of('3', 3));
+    }
+
+    @Test
+    public void should_not_create_with_negative_row() {
+        assertThatIllegalArgumentException().isThrownBy(()-> Coordinate.of('A', -3));
     }
 
     private void successfullyParseAndAssert(String toParse, char expectedColumn, int expectedRow) {

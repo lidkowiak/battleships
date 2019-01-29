@@ -3,6 +3,7 @@ package pl.lidkowiak.battleships;
 import pl.lidkowiak.battleships.gamelogic.Board;
 import pl.lidkowiak.battleships.gamelogic.Coordinate;
 import pl.lidkowiak.battleships.gamelogic.ShotResult;
+import pl.lidkowiak.battleships.gamelogic.State;
 
 import java.io.PrintStream;
 import java.util.function.Supplier;
@@ -62,10 +63,13 @@ public class ConsoleBattleships {
     private void printBoard() {
         final StringBuilder sb = new StringBuilder(boardHeader);
 
-        for (int rowNo = 1; rowNo <= board.size(); rowNo++) {
-            sb.append(String.format("%2d ", rowNo));
-            board.row(rowNo)
-                    .forEach(s -> sb.append(s.asChar() + " "));
+        final State[][] states = board.curentState();
+
+        for (int rowNo = 0; rowNo < states.length; rowNo++) {
+            sb.append(String.format("%2d ", rowNo + 1));
+            for (int colNo = 0; colNo < states[rowNo].length; colNo++) {
+                sb.append(states[rowNo][colNo].asChar() + " ");
+            }
             sb.append("\n");
         }
 

@@ -3,14 +3,31 @@ package pl.lidkowiak.battleships.gamelogic;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.*;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.VERTICAL;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 
 public class BoardTest {
+
+    @Test
+    public void should_not_be_able_to_create_board_with_negative_size() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> Board.newWithAlreadyPlacedShips(-1,
+                        singletonList(new ShipOnGrid(5, Coordinate.of('G', 6), HORIZONTAL)))
+                )
+                .withMessage("Board size is less or equal 0!");
+    }
+
+    @Test
+    public void should_not_be_able_to_create_board_with_no_ships() {
+        assertThatIllegalArgumentException()
+                .isThrownBy(() -> Board.newWithAlreadyPlacedShips(10, emptyList())
+                )
+                .withMessage("There is no ship!");
+    }
 
     @Test
     public void should_not_be_able_to_create_board_with_ships_placed_outside_board() {

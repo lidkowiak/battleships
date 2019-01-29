@@ -1,14 +1,11 @@
 package pl.lidkowiak.battleships.gamelogic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
 
@@ -29,9 +26,9 @@ public class Board {
     }
 
     private Board(int size, Collection<ShipOnGrid> ships) {
-        this.size = size;
+        this.size = validateGreaterThanZero(size);
         this.grid = new GridSquare[size][size];
-        this.ships = new ArrayList<>(ships);
+        this.ships = new ArrayList<>(validateNotEmpty(ships));
         initGrid();
     }
 
@@ -54,10 +51,29 @@ public class Board {
         return size;
     }
 
-    public List<State> row(int i) {
-        return unmodifiableList(Arrays.stream(grid[i - 1])
-                .map(GridSquare::state)
-                .collect(toList()));
+    public State[][] curentState() {
+        State[][] currentState = new State[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                currentState[i][j] = grid[i][j].state();
+            }
+        }
+        return currentState;
+    }
+
+    private int validateGreaterThanZero(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Board size is less or equal 0!");
+        }
+        return size;
+    }
+
+    private Collection<ShipOnGrid> validateNotEmpty(Collection<ShipOnGrid> ships) {
+        if (ships.isEmpty()) {
+            throw new IllegalArgumentException("There is no ship!");
+        }
+        return ships;
     }
 
     private void initGrid() {
