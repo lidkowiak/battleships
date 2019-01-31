@@ -1,8 +1,6 @@
 package pl.lidkowiak.battleships.gamelogic;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -11,10 +9,9 @@ import static pl.lidkowiak.battleships.gamelogic.ShotResult.*;
 public class Board {
 
     private final int size;
-    private final List<ShipOnGrid> ships;
     private final GridSquare[][] grid;
 
-    private int sunkShipsCount = 0;
+    private int shipsToSinkCount;
 
     public static Board newWithShipsPlacedAtRandom(int size, Ships... ships) {
         return new Board(size, new RandomShipOnGridDeployer(size, ships).shipsOnGrid());
@@ -26,9 +23,9 @@ public class Board {
 
     private Board(int size, Collection<ShipOnGrid> ships) {
         this.size = validateGreaterThanZero(size);
-        this.ships = new ArrayList<>(validateNotEmpty(ships));
         this.grid = new GridSquare[size][size];
-        initGrid();
+        this.shipsToSinkCount = ships.size();
+        initGrid(validateNotEmpty(ships));
     }
 
     public ShotResult shot(Coordinate coordinate) {
@@ -37,13 +34,13 @@ public class Board {
         }
         final ShotResult shotResult = gridSquareAt(coordinate).shot();
         if (SINK.equals(shotResult)) {
-            sunkShipsCount++;
+            shipsToSinkCount--;
         }
         return shotResult;
     }
 
     public boolean allShipsAreSunk() {
-        return sunkShipsCount >= ships.size();
+        return shipsToSinkCount <= 0;
     }
 
     public int size() {
@@ -75,7 +72,7 @@ public class Board {
         return ships;
     }
 
-    private void initGrid() {
+    private void initGrid(Collection<ShipOnGrid> ships) {
         ships.forEach(this::putShipOnGrid);
         fillInNullSquaresWithEmptySquare();
     }
@@ -122,7 +119,7 @@ public class Board {
         public ShotResult shot() {
             if (State.NOT_HIT.equals(state)) {
                 state = State.MISS;
-                return ShotResult.MISS;
+                return MISS;
             }
             return ALREADY_SHOT;
         }
