@@ -6,19 +6,18 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
-import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.*;
 
 public class Board {
 
     private final int size;
-    private final GridSquare[][] grid;
     private final List<ShipOnGrid> ships;
+    private final GridSquare[][] grid;
 
     private int sunkShipsCount = 0;
 
     public static Board newWithShipsPlacedAtRandom(int size, Ships... ships) {
-        return newWithAlreadyPlacedShips(size, new RandomShipOnGridDeployer(size, ships).shipsOnGrid());
+        return new Board(size, new RandomShipOnGridDeployer(size, ships).shipsOnGrid());
     }
 
     public static Board newWithAlreadyPlacedShips(int size, Collection<ShipOnGrid> ships) {
@@ -27,8 +26,8 @@ public class Board {
 
     private Board(int size, Collection<ShipOnGrid> ships) {
         this.size = validateGreaterThanZero(size);
-        this.grid = new GridSquare[size][size];
         this.ships = new ArrayList<>(validateNotEmpty(ships));
+        this.grid = new GridSquare[size][size];
         initGrid();
     }
 
@@ -51,8 +50,8 @@ public class Board {
         return size;
     }
 
-    public State[][] curentState() {
-        State[][] currentState = new State[size][size];
+    public State[][] currentState() {
+        final State[][] currentState = new State[size][size];
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -121,8 +120,11 @@ public class Board {
 
         @Override
         public ShotResult shot() {
-            state = State.MISS;
-            return ShotResult.MISS;
+            if (State.NOT_HIT.equals(state)) {
+                state = State.MISS;
+                return ShotResult.MISS;
+            }
+            return ALREADY_SHOT;
         }
 
         @Override

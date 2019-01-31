@@ -37,19 +37,19 @@ public class Coordinate {
         this.row = validateInRowRange(row);
     }
 
-    private int validateInRowRange(int row) {
-        if (row > 0) {
-            return row;
-        }
-        throw new IllegalArgumentException("Invalid row");
-    }
-
     private char validateInColumnRange(char column) {
         if (column >= 'A' && column <= 'Z') {
             return column;
         }
         ;
         throw new IllegalArgumentException("Invalid column identifier " + column);
+    }
+
+    private int validateInRowRange(int row) {
+        if (row > 0) {
+            return row;
+        }
+        throw new IllegalArgumentException("Invalid row");
     }
 
     int columnZeroIndexed() {
@@ -76,7 +76,6 @@ public class Coordinate {
     private boolean isWithinRange(int toTest, int lowerBound, int upperBound) {
         return toTest >= lowerBound && toTest <= upperBound;
     }
-
 
     @Override
     public boolean equals(Object o) {

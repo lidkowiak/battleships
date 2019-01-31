@@ -5,9 +5,10 @@ public enum ShotResult {
     OUTSIDE_THE_GRID("Outside the grid!"),
     HIT("HIT!"),
     MISS("MISS"),
-    SINK("SINK!");
+    SINK("SINK!"),
+    ALREADY_SHOT("Already shot");
 
-    private String message;
+    private final String message;
 
     ShotResult(String message) {
         this.message = message;

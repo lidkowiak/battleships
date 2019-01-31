@@ -7,19 +7,19 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import static java.util.Collections.unmodifiableMap;
-import static pl.lidkowiak.battleships.gamelogic.ShotResult.HIT;
+import static pl.lidkowiak.battleships.gamelogic.ShotResult.ALREADY_SHOT;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.SINK;
-import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
+import static pl.lidkowiak.battleships.gamelogic.State.*;
 
 public class ShipOnGrid {
 
-    private final int size;
     private final Map<Coordinate, PieceSquare> pieces;
+    private final Ships ship;
     private int hits;
 
-    public ShipOnGrid(int size, Coordinate startPosition, Orientation orientation) {
-        this.size = size;
-        this.pieces = new HashMap<>(size);
+    public ShipOnGrid(Ships ship, Coordinate startPosition, Orientation orientation) {
+        this.ship = ship;
+        this.pieces = new HashMap<>(ship.size());
         this.hits = 0;
 
         initPieces(startPosition, orientation);
@@ -36,12 +36,12 @@ public class ShipOnGrid {
     }
 
     boolean isSunk() {
-        return hits >= size;
+        return hits >= ship.size();
     }
 
     private void initPieces(Coordinate startPosition, Orientation orientation) {
         Coordinate current = startPosition;
-        for (int i = 1; i <= size; i++, current = orientation.next(current)) {
+        for (int i = 1; i <=  ship.size(); i++, current = orientation.next(current)) {
             pieces.put(current, new PieceSquare(this));
         }
     }
@@ -52,7 +52,7 @@ public class ShipOnGrid {
             pieces.values().forEach(PieceSquare::shipSank);
             return SINK;
         }
-        return HIT;
+        return ShotResult.HIT;
     }
 
     public enum Orientation {
@@ -91,10 +91,10 @@ public class ShipOnGrid {
         @Override
         public ShotResult shot() {
             if (NOT_HIT.equals(state)) {
-                state = State.HIT;
+                state = HIT;
                 return ship.hit();
             }
-            return ship.isSunk() ? SINK : HIT;
+            return ALREADY_SHOT;
         }
 
         @Override
@@ -103,7 +103,7 @@ public class ShipOnGrid {
         }
 
         private void shipSank() {
-            state = State.SUNK;
+            state = SUNK;
         }
 
     }

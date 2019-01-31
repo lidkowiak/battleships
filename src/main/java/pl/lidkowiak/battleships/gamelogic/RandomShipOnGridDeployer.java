@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Random;
 
+import static java.util.Arrays.asList;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
 
 class RandomShipOnGridDeployer {
@@ -15,17 +16,17 @@ class RandomShipOnGridDeployer {
     private static final int MAX_ATTEMPTS_PER_SHIP = 30;
 
     private final int boardSize;
-    private final Ships[] ships;
+    private final Collection<Ships> ships;
     private final Collection<ShipOnGrid> shipsOnGrid;
 
     private final Random random;
 
     private final char maxColumn;
 
-    RandomShipOnGridDeployer(int boardSize, Ships... ships) {
+    RandomShipOnGridDeployer(int boardSize, Ships... shipsToDeploy) {
         this.boardSize = boardSize;
-        this.ships = ships;
-        this.shipsOnGrid = new ArrayList<>(ships.length);
+        this.ships = asList(shipsToDeploy);
+        this.shipsOnGrid = new ArrayList<>(shipsToDeploy.length);
         this.maxColumn = (char) ('A' + boardSize - 1);
         this.random = new Random(System.currentTimeMillis());
         placeAtRandom();
@@ -38,14 +39,14 @@ class RandomShipOnGridDeployer {
     private void placeAtRandom() {
         for (int i = 0; i < MAX_ATTEMPTS; i++) {
             shipsOnGrid.clear();
-            if (tryPlaceAtRandom()) {
+            if (tryPlaceAtRandomAllShips()) {
                 return;
             }
         }
         throw new IllegalStateException("Can not place ships at random!");
     }
 
-    private boolean tryPlaceAtRandom() {
+    private boolean tryPlaceAtRandomAllShips() {
         for (Ships ship : ships) {
             if (!tryPlaceAtRandom(ship)) {
                 return false;
@@ -59,7 +60,7 @@ class RandomShipOnGridDeployer {
             throw new IllegalStateException("Ship " + ship + " is to big for given board!");
         }
         for (int i = 0; i < MAX_ATTEMPTS_PER_SHIP; i++) {
-            final ShipOnGrid candidate = randomPlaceOnGridThatFitBoard(ship.size());
+            final ShipOnGrid candidate = randomPlaceOnGridThatFitBoard(ship);
             if (!overlapWithAlreadyPlacedShips(candidate)) {
                 shipsOnGrid.add(candidate);
                 return true;
@@ -68,15 +69,15 @@ class RandomShipOnGridDeployer {
         return false;
     }
 
-    private ShipOnGrid randomPlaceOnGridThatFitBoard(int shipSize) {
+    private ShipOnGrid randomPlaceOnGridThatFitBoard(Ships ship) {
         final Orientation orientation = randomOrientation();
-        final char maxCol = HORIZONTAL.equals(orientation) ? (char) (maxColumn - shipSize + 1) : maxColumn;
-        final int maxRow = HORIZONTAL.equals(orientation) ? boardSize : boardSize - shipSize + 1;
+        final char maxCol = HORIZONTAL.equals(orientation) ? (char) (maxColumn - ship.size() + 1) : maxColumn;
+        final int maxRow = HORIZONTAL.equals(orientation) ? boardSize : boardSize - ship.size() + 1;
 
         final char column = randomColumnInRange('A', maxCol);
         final int row = randomIntInRange(1, maxRow);
 
-        return new ShipOnGrid(shipSize, Coordinate.of(column, row), orientation);
+        return new ShipOnGrid(ship, Coordinate.of(column, row), orientation);
     }
 
     private boolean overlapWithAlreadyPlacedShips(ShipOnGrid candidate) {

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.Ships.DESTROYER;
 import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 import static pl.lidkowiak.battleships.gamelogic.State.SUNK;
 
@@ -16,7 +18,7 @@ public class ShipOnGridTest {
     public void should_newly_created_ship_be_not_sunk_and_has_properly_set_pieces_with_NO_HIT_state() {
         // given
         //when
-        ShipOnGrid cut = new ShipOnGrid(5, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
+        ShipOnGrid cut = new ShipOnGrid(BATTLESHIP, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
 
         Map<Coordinate, GridSquare> pieces = cut.getPieces();
 
@@ -36,14 +38,15 @@ public class ShipOnGridTest {
     @Test
     public void should_ship_sunk_when_all_of_its_pieces_are_hit() {
         // given
-        ShipOnGrid cut = new ShipOnGrid(3, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
+        ShipOnGrid cut = new ShipOnGrid(DESTROYER, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
 
         //when
         List<GridSquare> pieces = new ArrayList<>(cut.getPieces().values());
 
         assertThat(pieces.get(0).shot()).isEqualTo(ShotResult.HIT);
         assertThat(pieces.get(1).shot()).isEqualTo(ShotResult.HIT);
-        assertThat(pieces.get(2).shot()).isEqualTo(ShotResult.SINK);
+        assertThat(pieces.get(2).shot()).isEqualTo(ShotResult.HIT);
+        assertThat(pieces.get(3).shot()).isEqualTo(ShotResult.SINK);
 
         //then
         assertThat(cut.isSunk()).isTrue();
@@ -51,9 +54,9 @@ public class ShipOnGridTest {
     }
 
     @Test
-    public void should_not_skin_ship_when_not_all_of_its_pieces_are_hit() {
+    public void should_not_sink_ship_when_not_all_of_its_pieces_are_hit() {
         // given
-        ShipOnGrid cut = new ShipOnGrid(3, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
+        ShipOnGrid cut = new ShipOnGrid(BATTLESHIP, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
 
         //when
         List<GridSquare> pieces = new ArrayList<>(cut.getPieces().values());
@@ -69,8 +72,8 @@ public class ShipOnGridTest {
     @Test
     public void should_return_that_two_ships_overlap() {
         // given
-        ShipOnGrid ship1 = new ShipOnGrid(3, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
-        ShipOnGrid ship2 = new ShipOnGrid(4, Coordinate.of('B', 1), ShipOnGrid.Orientation.VERTICAL);
+        ShipOnGrid ship1 = new ShipOnGrid(BATTLESHIP, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
+        ShipOnGrid ship2 = new ShipOnGrid(BATTLESHIP, Coordinate.of('B', 1), ShipOnGrid.Orientation.VERTICAL);
 
         //when
         //then
@@ -80,8 +83,8 @@ public class ShipOnGridTest {
     @Test
     public void should_return_that_two_ships_does_not_overlap() {
         // given
-        ShipOnGrid ship1 = new ShipOnGrid(3, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
-        ShipOnGrid ship2 = new ShipOnGrid(4, Coordinate.of('G', 5), ShipOnGrid.Orientation.VERTICAL);
+        ShipOnGrid ship1 = new ShipOnGrid(BATTLESHIP, Coordinate.of('A', 1), ShipOnGrid.Orientation.HORIZONTAL);
+        ShipOnGrid ship2 = new ShipOnGrid(BATTLESHIP, Coordinate.of('G', 5), ShipOnGrid.Orientation.VERTICAL);
 
         //when
         //then

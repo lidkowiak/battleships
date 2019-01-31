@@ -41,7 +41,7 @@ public class ConsoleBattleships {
         this.board = board;
         this.coordinateSupplier = coordinateSupplier;
         this.out = out;
-        this.boardHeader = initBoardHeader();
+        this.boardHeader = boardHeader();
     }
 
     void play() {
@@ -63,7 +63,7 @@ public class ConsoleBattleships {
     private void printBoard() {
         final StringBuilder sb = new StringBuilder(boardHeader);
 
-        final State[][] states = board.curentState();
+        final State[][] states = board.currentState();
 
         for (int rowNo = 0; rowNo < states.length; rowNo++) {
             sb.append(String.format("%2d ", rowNo + 1));
@@ -76,7 +76,7 @@ public class ConsoleBattleships {
         out.println(sb.toString());
     }
 
-    private String initBoardHeader() {
+    private String boardHeader() {
         final StringBuilder sb = new StringBuilder("   ");
 
         for (char col = 'A'; col < 'A' + board.size(); col++) {
