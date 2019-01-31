@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
-import static pl.lidkowiak.battleships.gamelogic.Ships.DESTROYER;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.DESTROYER;
 import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 import static pl.lidkowiak.battleships.gamelogic.State.SUNK;
 

@@ -8,8 +8,8 @@ import pl.lidkowiak.battleships.gamelogic.State;
 import java.io.PrintStream;
 import java.util.function.Supplier;
 
-import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
-import static pl.lidkowiak.battleships.gamelogic.Ships.DESTROYER;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.DESTROYER;
 
 public class ConsoleBattleships {
 
@@ -20,14 +20,14 @@ public class ConsoleBattleships {
             "Please enter coordinates of the form 'A5', where 'A' is the column and '5' is the row, to specify a square to target.\n" +
             "Grid legend: \n" +
             "'O' - miss, \n" +
-            "'X' - hit, \n" +
-            "'S' - part of sunk ship\n\n";
+            "'x' - hit, \n" +
+            "'X' - part of sunk ship\n";
 
 
     public static void main(String[] args) {
         final ConsoleBattleships consoleBattleships = new ConsoleBattleships(
                 Board.newWithShipsPlacedAtRandom(BOARD_SIZE, BATTLESHIP, DESTROYER, DESTROYER),
-                new InputStreamCoordinateSupplier(System.in, System.out), System.out);
+                new InputCoordinateSupplier(System.in, System.out), System.out);
         consoleBattleships.play();
     }
 
@@ -51,24 +51,25 @@ public class ConsoleBattleships {
         while (true) {
             final Coordinate coordinate = coordinateSupplier.get();
             final ShotResult shotResult = board.shot(coordinate);
-            out.println(shotResult.message() + "\n");
+            out.println(shotResult.message());
+
             printBoard();
             if (board.allShipsAreSunk()) {
-                break;
+                out.println("All ships are sunk! GAME OVER");
+                return;
             }
         }
-        out.println("All ships are sunk! GAME OVER");
     }
 
     private void printBoard() {
-        final StringBuilder sb = new StringBuilder(boardHeader);
-
+        final StringBuilder sb = new StringBuilder("\n").append(boardHeader);
         final State[][] states = board.currentState();
 
         for (int rowNo = 0; rowNo < states.length; rowNo++) {
             sb.append(String.format("%2d ", rowNo + 1));
             for (int colNo = 0; colNo < states[rowNo].length; colNo++) {
-                sb.append(states[rowNo][colNo].asChar() + " ");
+                final State stateAtSquare = states[rowNo][colNo];
+                sb.append(stateAtSquare.asChar()).append(" ");
             }
             sb.append("\n");
         }
@@ -80,11 +81,10 @@ public class ConsoleBattleships {
         final StringBuilder sb = new StringBuilder("   ");
 
         for (char col = 'A'; col < 'A' + board.size(); col++) {
-            sb.append(col + " ");
+            sb.append(col).append(" ");
         }
-        sb.append("\n");
 
-        return sb.toString();
+        return sb.append("\n").toString();
     }
 
 }

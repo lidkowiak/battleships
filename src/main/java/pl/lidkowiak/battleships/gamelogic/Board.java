@@ -13,7 +13,7 @@ public class Board {
 
     private int shipsToSinkCount;
 
-    public static Board newWithShipsPlacedAtRandom(int size, Ships... ships) {
+    public static Board newWithShipsPlacedAtRandom(int size, ShipKind... ships) {
         return new Board(size, new RandomShipOnGridDeployer(size, ships).shipsOnGrid());
     }
 
@@ -83,7 +83,7 @@ public class Board {
                 throw new IllegalStateException("Ship is placed outside board.");
             }
             if (nonNull(gridSquareAt(c))) {
-                throw new IllegalStateException("Ships overlap.");
+                throw new IllegalStateException("ShipKind overlap.");
             }
             setGridSquareAt(c, gs);
         });

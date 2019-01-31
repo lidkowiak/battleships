@@ -8,7 +8,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.*;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.VERTICAL;
-import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.BATTLESHIP;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.OUTSIDE_THE_GRID;
 
 public class BoardTest {
@@ -46,7 +46,7 @@ public class BoardTest {
                         asList(new ShipOnGrid(BATTLESHIP, Coordinate.of('A', 1), HORIZONTAL),
                                 new ShipOnGrid(BATTLESHIP, Coordinate.of('B', 1), VERTICAL)))
                 )
-                .withMessage("Ships overlap.");
+                .withMessage("ShipKind overlap.");
     }
 
     @Test

@@ -1,13 +1,13 @@
 package pl.lidkowiak.battleships.gamelogic;
 
-public enum Ships {
+public enum ShipKind {
 
     BATTLESHIP(5),
     DESTROYER(4);
 
     private final int size;
 
-    Ships(int size) {
+    ShipKind(int size) {
         this.size = size;
     }
 

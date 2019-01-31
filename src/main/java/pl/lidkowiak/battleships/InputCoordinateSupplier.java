@@ -8,12 +8,12 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Supplier;
 
-class InputStreamCoordinateSupplier implements Supplier<Coordinate> {
+class InputCoordinateSupplier implements Supplier<Coordinate> {
 
     private final Scanner in;
     private final PrintStream out;
 
-    InputStreamCoordinateSupplier(InputStream in, PrintStream out) {
+    InputCoordinateSupplier(InputStream in, PrintStream out) {
         this.in = new Scanner(in);
         this.out = out;
     }

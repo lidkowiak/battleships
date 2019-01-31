@@ -14,12 +14,12 @@ import static pl.lidkowiak.battleships.gamelogic.State.*;
 public class ShipOnGrid {
 
     private final Map<Coordinate, PieceSquare> pieces;
-    private final Ships ship;
+    private final ShipKind ship;
     private int hits;
 
-    public ShipOnGrid(Ships ship, Coordinate startPosition, Orientation orientation) {
-        this.ship = ship;
-        this.pieces = new HashMap<>(ship.size());
+    public ShipOnGrid(ShipKind shipKind, Coordinate startPosition, Orientation orientation) {
+        this.ship = shipKind;
+        this.pieces = new HashMap<>(shipKind.size());
         this.hits = 0;
 
         initPieces(startPosition, orientation);

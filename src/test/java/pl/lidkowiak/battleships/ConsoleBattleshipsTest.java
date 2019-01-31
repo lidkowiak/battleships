@@ -10,7 +10,7 @@ import java.util.Iterator;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static pl.lidkowiak.battleships.gamelogic.ShipOnGrid.Orientation.HORIZONTAL;
-import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.BATTLESHIP;
 
 public class ConsoleBattleshipsTest {
 

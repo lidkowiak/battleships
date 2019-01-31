@@ -4,8 +4,8 @@ public enum State {
 
     NOT_HIT(' '),
     MISS('O'),
-    HIT('X'),
-    SUNK('S');
+    HIT('x'),
+    SUNK('X');
 
     private final char asChar;
 

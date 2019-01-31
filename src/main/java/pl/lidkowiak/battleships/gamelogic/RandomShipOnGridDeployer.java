@@ -16,15 +16,15 @@ class RandomShipOnGridDeployer {
     private static final int MAX_ATTEMPTS_PER_SHIP = 30;
 
     private final int boardSize;
-    private final Collection<Ships> ships;
+    private final Collection<ShipKind> ships;
     private final Collection<ShipOnGrid> shipsOnGrid;
 
     private final Random random;
 
     private final char maxColumn;
 
-    RandomShipOnGridDeployer(int boardSize, Ships... shipsToDeploy) {
-        this.boardSize = boardSize;
+    RandomShipOnGridDeployer(int boardSize, ShipKind... shipsToDeploy) {
+        this.boardSize = validateGreaterThanZero(boardSize);
         this.ships = asList(shipsToDeploy);
         this.shipsOnGrid = new ArrayList<>(shipsToDeploy.length);
         this.maxColumn = (char) ('A' + boardSize - 1);
@@ -47,7 +47,7 @@ class RandomShipOnGridDeployer {
     }
 
     private boolean tryPlaceAtRandomAllShips() {
-        for (Ships ship : ships) {
+        for (ShipKind ship : ships) {
             if (!tryPlaceAtRandom(ship)) {
                 return false;
             }
@@ -55,7 +55,7 @@ class RandomShipOnGridDeployer {
         return true;
     }
 
-    private boolean tryPlaceAtRandom(Ships ship) {
+    private boolean tryPlaceAtRandom(ShipKind ship) {
         if (ship.size() > boardSize) {
             throw new IllegalStateException("Ship " + ship + " is to big for given board!");
         }
@@ -69,7 +69,7 @@ class RandomShipOnGridDeployer {
         return false;
     }
 
-    private ShipOnGrid randomPlaceOnGridThatFitBoard(Ships ship) {
+    private ShipOnGrid randomPlaceOnGridThatFitBoard(ShipKind ship) {
         final Orientation orientation = randomOrientation();
         final char maxCol = HORIZONTAL.equals(orientation) ? (char) (maxColumn - ship.size() + 1) : maxColumn;
         final int maxRow = HORIZONTAL.equals(orientation) ? boardSize : boardSize - ship.size() + 1;
@@ -97,6 +97,13 @@ class RandomShipOnGridDeployer {
 
     private char randomColumnInRange(char min, char max) {
         return (char) (random.nextInt((max - min) + 1) + min);
+    }
+
+    private int validateGreaterThanZero(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("Board size is less or equal 0!");
+        }
+        return size;
     }
 
 }

@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static pl.lidkowiak.battleships.gamelogic.Ships.BATTLESHIP;
-import static pl.lidkowiak.battleships.gamelogic.Ships.DESTROYER;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.BATTLESHIP;
+import static pl.lidkowiak.battleships.gamelogic.ShipKind.DESTROYER;
 
 public class RandomShipOnGridDeployerTest {
 
