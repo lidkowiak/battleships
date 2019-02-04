@@ -13,8 +13,8 @@ import static pl.lidkowiak.battleships.gamelogic.State.*;
 
 public class ShipOnGrid {
 
-    private final Map<Coordinate, PieceSquare> pieces;
     private final ShipKind ship;
+    private final Map<Coordinate, PieceSquare> pieces;
     private int hits;
 
     public ShipOnGrid(ShipKind shipKind, Coordinate startPosition, Orientation orientation) {
@@ -41,7 +41,7 @@ public class ShipOnGrid {
 
     private void initPieces(Coordinate startPosition, Orientation orientation) {
         Coordinate current = startPosition;
-        for (int i = 1; i <=  ship.size(); i++, current = orientation.next(current)) {
+        for (int i = 1; i <= ship.size(); i++, current = orientation.next(current)) {
             pieces.put(current, new PieceSquare(this));
         }
     }

@@ -23,19 +23,19 @@ public class ConsoleBattleships {
             "'x' - hit, \n" +
             "'X' - part of sunk ship\n";
 
-
-    public static void main(String[] args) {
-        final ConsoleBattleships consoleBattleships = new ConsoleBattleships(
-                Board.newWithShipsPlacedAtRandom(BOARD_SIZE, BATTLESHIP, DESTROYER, DESTROYER),
-                new InputCoordinateSupplier(System.in, System.out), System.out);
-        consoleBattleships.play();
-    }
-
     private final Board board;
     private final Supplier<Coordinate> coordinateSupplier;
 
     private final PrintStream out;
     private final String boardHeader;
+
+    public static void main(String[] args) {
+        final Board board = Board.newWithShipsPlacedAtRandom(BOARD_SIZE, BATTLESHIP, DESTROYER, DESTROYER);
+        final Supplier<Coordinate> coordinateSupplier = new InputCoordinateSupplier(System.in, System.out);
+
+        final ConsoleBattleships consoleBattleships = new ConsoleBattleships(board, coordinateSupplier, System.out);
+        consoleBattleships.play();
+    }
 
     ConsoleBattleships(Board board, Supplier<Coordinate> coordinateSupplier, PrintStream out) {
         this.board = board;

@@ -5,6 +5,7 @@ import java.util.Collection;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static pl.lidkowiak.battleships.gamelogic.ShotResult.*;
+import static pl.lidkowiak.battleships.gamelogic.State.NOT_HIT;
 
 public class Board {
 
@@ -112,12 +113,12 @@ public class Board {
         private State state;
 
         EmptySquare() {
-            state = State.NOT_HIT;
+            state = NOT_HIT;
         }
 
         @Override
         public ShotResult shot() {
-            if (State.NOT_HIT.equals(state)) {
+            if (NOT_HIT.equals(state)) {
                 state = State.MISS;
                 return MISS;
             }
